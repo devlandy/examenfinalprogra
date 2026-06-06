@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat UMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============== SERIE I: LOGIN ============== -->
+  <main id="vistaLogin" class="login-wrap">
+    <section class="login-card">
+      <p class="kicker">Universidad Mariano Galvez</p>
+      <h1>Chat <span>UMG</span></h1>
+      <p class="subtitle">Inicia sesion para enviar mensajes.</p>
+
+      <div class="field">
+        <label for="usuario">Usuario</label>
+        <input id="usuario" type="text" placeholder="ej: ctezop" autocomplete="username" />
+        <small>Solo la parte antes de @miumg.edu.gt</small>
+      </div>
+
+      <div class="field">
+        <label for="password">Contrasena</label>
+        <input id="password" type="password" placeholder="********" autocomplete="current-password" />
+      </div>
+
+      <button id="btnLogin" class="btn-primary">Ingresar</button>
+      <p id="loginMsg" class="msg"></p>
+    </section>
+  </main>
+
+  <!-- ============== SERIE II: ENVIO DE MENSAJES ============== -->
+  <main id="vistaChat" class="chat-wrap" hidden>
+    <header class="topbar">
+      <div>
+        <p class="kicker">Sesion activa</p>
+        <h2>Hola, <span id="nombreUsuario"></span></h2>
+      </div>
+      <button id="btnLogout" class="btn-ghost">Cerrar sesion</button>
+    </header>
+
+    <!-- Mensajes enviados en esta sesion (solo visual) -->
+    <section class="mensajes" id="listaMensajes">
+      <p class="vacio">Escribe abajo y envia tu primer mensaje.</p>
+    </section>
+
+    <!-- Formulario de envio -->
+    <footer class="composer">
+      <textarea id="contenido" rows="1" placeholder="Escribe un mensaje..."></textarea>
+      <button id="btnEnviar" class="btn-primary">Enviar</button>
+    </footer>
+    <p id="chatMsg" class="msg msg-chat"></p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
