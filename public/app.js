@@ -1,6 +1,12 @@
 /* =========================================================================
    CHAT UMG - Logica del frontend (Series I y II)
+   Version para hosting estatico (Azure Static Web Apps):
+   el navegador llama DIRECTO a la API de la UMG, sin servidor intermedio.
    ========================================================================= */
+
+// URLs de la API proporcionada por el curso
+const API_LOGIN = "https://backcvbgtmdesa.azurewebsites.net/api/login/authenticate";
+const API_MENSAJES = "https://backcvbgtmdesa.azurewebsites.net/api/Mensajes";
 
 const $ = (id) => document.getElementById(id);
 
@@ -54,16 +60,19 @@ async function login() {
   setMsg(loginMsg, "Verificando credenciales...");
 
   try {
-    const r = await fetch("/api/auth", {
+    // POST directo a la API de autenticacion
+    const r = await fetch(API_LOGIN, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ Username: usuario, Password: password })
     });
 
-    const data = await r.json();
+    let data;
+    const text = await r.text();
+    try { data = JSON.parse(text); } catch { data = text; }
 
     if (!r.ok) {
-      setMsg(loginMsg, data.error || "No fue posible iniciar sesion.", "error");
+      setMsg(loginMsg, "Credenciales invalidas o error de la API.", "error");
       btn.disabled = false;
       return;
     }
@@ -82,7 +91,7 @@ async function login() {
     setMsg(loginMsg, "Acceso correcto.", "ok");
     entrarAlChat();
   } catch (err) {
-    setMsg(loginMsg, "Error de conexion con el servidor.", "error");
+    setMsg(loginMsg, "Error de conexion con la API.", "error");
   } finally {
     btn.disabled = false;
   }
@@ -100,7 +109,8 @@ async function enviarMensaje() {
   setMsg(chatMsg, "Enviando...");
 
   try {
-    const r = await fetch("/api/mensajes", {
+    // POST directo a la API de mensajes, con el token Bearer
+    const r = await fetch(API_MENSAJES, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -114,13 +124,11 @@ async function enviarMensaje() {
       })
     });
 
-    const data = await r.json();
-
     if (!r.ok) {
       if (r.status === 401) {
         setMsg(chatMsg, "Tu sesion expiro. Vuelve a iniciar sesion.", "error");
       } else {
-        setMsg(chatMsg, data.error || "No se pudo enviar el mensaje.", "error");
+        setMsg(chatMsg, "No se pudo enviar el mensaje.", "error");
       }
       btn.disabled = false;
       return;
@@ -197,3 +205,4 @@ ta.addEventListener("keydown", (e) => {
 if (getToken() && getUsuario()) {
   entrarAlChat();
 }
+
